@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot name="dribot_caster" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="caster" params="prefix x_pos radius">
+    <link name="${prefix}_link">
+      <visual>
+        <geometry>
+          <sphere radius="${radius}"/>
+        </geometry>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="${radius}"/>
+        </geometry>
+      </collision>
+
+      <xacro:sphere_inertia m="0.5" r="${radius}"/>
+    </link>
+
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="${x_pos} 0.0 ${-(base_height/2)}" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+</robot>
