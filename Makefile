@@ -7,7 +7,8 @@ build:
 	colcon build --symlink-install --packages-select \
 	    dribot_description \
 	    dribot_simulation \
-	    dribot_teleop
+	    dribot_teleop \
+	    dribot_perception
 
 start-rviz:
 	source install/setup.bash && ros2 launch dribot_description rviz_launch.py
@@ -17,6 +18,11 @@ start-simulation:
 
 start-teleop:
 	source install/setup.bash && ros2 launch dribot_teleop teleop_launch.py
+
+# Already triggered by the `start-simulation` target as
+# part of the Gazebo simulation.
+#start-ekf:
+#	source install/setup.bash && ros2 launch dribot_perception dribot_ekf_launch.py
 
 # Run a velocity test command.
 vel-test:

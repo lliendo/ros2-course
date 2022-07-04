@@ -34,6 +34,15 @@ def get_robot_state_node():
         ])
     )
 
+def get_dribot_perception():
+    pkg_share = FindPackageShare(package='dribot_perception').find('dribot_perception')
+
+    return IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            join(pkg_share, 'launch/dribot_ekf_launch.py'),
+        ])
+    )
+
 def generate_launch_description():
     # Uncomment for manually controlling the robot.
     #teleop_keyboard = Node(
@@ -47,5 +56,6 @@ def generate_launch_description():
         get_gazebo_launcher(),
         get_spawn_entity(),
         get_robot_state_node(),
+        get_dribot_perception(),
         #teleop_keyboard,
     ])
