@@ -4,24 +4,45 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
-from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 
 
-def get_gazebo_launcher():
+# Temporarily commented out as Gzebo is launched from
+# `get_aws_robomaker` in headless mode with a predefined environment.
+#def get_gazebo_launcher():
+#    return IncludeLaunchDescription(
+#        PythonLaunchDescriptionSource([
+#            join(get_package_share_directory('gazebo_ros'), 'launch'),
+#            '/gazebo.launch.py'
+#        ]),
+#    )
+
+def get_aws_robomaker():
+    pkg_share = FindPackageShare(
+        package='aws_robomaker_small_house_world',
+    ).find('aws_robomaker_small_house_world')
+
     return IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-            join(get_package_share_directory('gazebo_ros'), 'launch'),
-            '/gazebo.launch.py'
+           join(pkg_share, 'launch/small_house.launch.py'),
         ]),
+        launch_arguments={
+            'gui': 'false',
+        }.items()
     )
 
 def get_spawn_entity():
     return Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        arguments=['-entity', 'dribot', '-topic', '/robot_description'],
+        arguments=[
+            '-entity', 'dribot',
+            '-topic', '/robot_description',
+            '-z', '0.40',
+        ],
         output='screen',
     )
 
@@ -53,7 +74,8 @@ def generate_launch_description():
     #)
 
     return LaunchDescription([
-        get_gazebo_launcher(),
+        #get_gazebo_launcher(),
+        get_aws_robomaker(),
         get_spawn_entity(),
         get_robot_state_node(),
         get_dribot_perception(),

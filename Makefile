@@ -8,7 +8,8 @@ build:
 	    dribot_description \
 	    dribot_simulation \
 	    dribot_teleop \
-	    dribot_perception
+	    dribot_perception \
+	    aws_robomaker_small_house_world
 
 start-rviz:
 	source install/setup.bash && ros2 launch dribot_description rviz_launch.py
