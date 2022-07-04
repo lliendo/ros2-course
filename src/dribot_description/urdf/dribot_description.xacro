@@ -19,6 +19,7 @@
   <xacro:include filename="$(find dribot_description)/urdf/caster.xacro" />
   <xacro:include filename="$(find dribot_description)/urdf/camera.xacro" />
   <xacro:include filename="$(find dribot_description)/urdf/lidar.xacro" />
+  <xacro:include filename="$(find dribot_description)/urdf/imu.xacro" />
 
   <link name="base_link">
     <visual>
@@ -51,6 +52,7 @@
   <xacro:wheel prefix="wheel_right" x_pos="0" y_pos="-${base_radius+wheel_ygap}" />
   <xacro:camera_macro parent="base_link" x_pos="${base_radius+0.0125}" y_pos="0" z_pos="${base_height/2-0.025}" />
   <xacro:lidar_macro parent="base_link" x_pos="0" y_pos="0" z_pos="${base_height/2+0.02}" />
+  <xacro:imu_macro parent="base_link" x_pos="-0.10" y_pos="0" z_pos="${base_height/2+0.005}" />
 
   <xacro:caster prefix="caster_front" x_pos="${base_to_caster}"
                 radius="${(wheel_radius+wheel_zoff-(base_height/2))}"/>
