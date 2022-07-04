@@ -64,6 +64,15 @@ def get_dribot_perception():
         ])
     )
 
+def get_slam_toolbox():
+    pkg_share = FindPackageShare(package='dribot_slam').find('dribot_slam')
+
+    return IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            join(pkg_share, 'launch/slam_toolbox_mapping_launch.py'),
+        ])
+    )
+
 def generate_launch_description():
     # Uncomment for manually controlling the robot.
     #teleop_keyboard = Node(
@@ -79,5 +88,6 @@ def generate_launch_description():
         get_spawn_entity(),
         get_robot_state_node(),
         get_dribot_perception(),
+        get_slam_toolbox(),
         #teleop_keyboard,
     ])
