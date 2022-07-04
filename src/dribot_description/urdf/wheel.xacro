@@ -26,6 +26,15 @@
       <origin xyz="${x_pos} ${y_pos} ${-wheel_zoff}" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
     </joint>
+
+    <gazebo reference="${prefix}_link">
+      <mu1 value="0.50"/>
+      <mu2 value="3.0"/>
+      <kp  value="10000000.0" />
+      <kd  value="100.0" />
+      <fdir1 value="0 0 1"/>
+      <material>Gazebo/Black</material>
+    </gazebo>
   </xacro:macro>
 
 </robot>
