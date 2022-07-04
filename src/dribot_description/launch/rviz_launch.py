@@ -3,6 +3,8 @@ from os.path import join
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import Command
@@ -15,27 +17,18 @@ def get_joint_state_node():
         name='joint_state_publisher',
     )
 
-def get_robot_state_node():
-    pkg_share = FindPackageShare(package='dribot_description').find('dribot_description')
-    dribot_description_path = join(pkg_share, 'urdf/dribot_description.xacro')
-
-    return Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        parameters=[{
-            'robot_description': Command([
-                'xacro ', dribot_description_path
-            ]),
-        }],
+def get_robot_state_node(pkg_share):
+    return IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            join(pkg_share, 'launch/load_description_launch.py'),
+        ])
     )
 
-
-def get_rviz2_node():
-    # Note that we pass down the rviz configuration file to rviz. This is to avoid
-    # adjusting the frame and other options after start.
-    pkg_share = FindPackageShare(package='dribot_description').find('dribot_description')
+def get_rviz2_node(pkg_share):
     dribot_rviz_config_path = join(pkg_share, 'config/dribot.rviz')
 
+    # Note that we pass down the rviz configuration file to rviz. This is to avoid
+    # adjusting the frame and other options after start.
     return Node(
         package='rviz2',
         executable='rviz2',
@@ -45,8 +38,10 @@ def get_rviz2_node():
     )
 
 def generate_launch_description():
+    pkg_share = FindPackageShare(package='dribot_description').find('dribot_description')
+
     return LaunchDescription([
         get_joint_state_node(),
-        get_robot_state_node(),
-        get_rviz2_node()
+        get_robot_state_node(pkg_share),
+        get_rviz2_node(pkg_share)
     ])
